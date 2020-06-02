@@ -10,6 +10,9 @@ import android.content.res.Resources
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Matrix
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -20,10 +23,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.param.feedbackapp.R
 import kotlinx.android.synthetic.main.activity_render.*
 import kotlinx.android.synthetic.main.color_palette_view.*
 import java.io.ByteArrayOutputStream
+import java.lang.Exception
 
 
 private const val REQUEST_CODE_DRAW = 111
@@ -91,15 +96,38 @@ class RenderActivity : AppCompatActivity() {
         builder.show()
     }
 
+    fun bitmapOverlayToCenter(bitmap1: Bitmap, overlayBitmap: Bitmap): Bitmap? {
+        val bgBitmapWidth = bitmap1.width
+        val bgBitmapHeight = bitmap1.height
+        val overlayBitmapWidth = overlayBitmap.width
+        val overlayBitmapHeight = overlayBitmap.height
+        val marginLeft = (overlayBitmapWidth * 0.1).toFloat()
+        val marginTop = (overlayBitmapHeight * 0.1).toFloat()
+        val finalBitmap =
+            Bitmap.createBitmap(bgBitmapWidth, bgBitmapHeight, bitmap1.config)
+        val canvas = Canvas(finalBitmap)
+        canvas.drawBitmap(bitmap1, Matrix(), null)
+        canvas.drawBitmap(overlayBitmap, marginLeft, marginTop, null)
+        return finalBitmap
+    }
+
     private fun sendDataBackToList() {
-        val bStream = ByteArrayOutputStream()
-        val bitmap = draw_view.getBitmap()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream)
-        val byteArray = bStream.toByteArray()
-        val returnIntent = Intent()
-        returnIntent.putExtra("bitmap", byteArray)
-        setResult(Activity.RESULT_OK, returnIntent)
-        finish()
+        try {
+            val bStream = ByteArrayOutputStream()
+            val bitmapDrawingView = draw_view.getBitmap()
+            val bitmapProileView = ivProfile.drawable.toBitmap()
+            val finalBitmap = bitmapOverlayToCenter(bitmapDrawingView,bitmapProileView)
+            finalBitmap?.compress(Bitmap.CompressFormat.PNG, 100, bStream)
+            val byteArray = bStream.toByteArray()
+            val returnIntent = Intent()
+            returnIntent.putExtra("bitmap", byteArray)
+            setResult(Activity.RESULT_OK, returnIntent)
+            finish()
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+
+
     }
 
     private fun setUpActionPallet() {

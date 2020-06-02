@@ -181,20 +181,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.3" />
+        app:layout_constraintGuide_percent="0.23" />
 
     <ImageView
         android:id="@+id/ivProfile"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_profile"
         android:adjustViewBounds="true"
         app:layout_collapseMode="parallax"
         app:layout_collapseParallaxMultiplier="0.7"
-        android:src="@drawable/ic_launcher_background"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_close_drawing" />
+        app:layout_constraintTop_toBottomOf="@+id/image_close_drawing"
+        tools:srcCompat="@mipmap/ic_launcher_round" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
