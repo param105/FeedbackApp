@@ -1,7 +1,6 @@
-package com.param.feedbackapp.widget
+package com.param.feedbackapp.utils
 
 import android.graphics.Path
-import com.param.feedbackapp.widget.Action
 import java.io.Writer
 
 class Quad(private val x1: Float, private val y1: Float, private val x2: Float, private val y2: Float) :

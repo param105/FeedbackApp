@@ -1,15 +1,15 @@
-package com.param.feedbackapp.widget
+package com.param.feedbackapp.utils
 
 import android.graphics.Path
 import java.io.Writer
 
-class Move(val x: Float, val y: Float) : Action {
+class Line(val x: Float, val y: Float) : Action {
 
     override fun perform(path: Path) {
-        path.moveTo(x, y)
+        path.lineTo(x, y)
     }
 
     override fun perform(writer: Writer) {
-        writer.write("M$x,$y")
+        writer.write("L$x,$y")
     }
 }

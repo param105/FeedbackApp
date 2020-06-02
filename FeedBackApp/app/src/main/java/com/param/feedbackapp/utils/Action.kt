@@ -1,4 +1,4 @@
-package com.param.feedbackapp.widget
+package com.param.feedbackapp.utils
 
 import android.graphics.Path
 import java.io.Serializable
