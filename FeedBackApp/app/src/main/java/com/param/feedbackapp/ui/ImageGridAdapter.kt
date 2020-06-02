@@ -27,7 +27,7 @@ class DrawAdapter(private val context: Context, private val imageList: ArrayList
         val path = imageList[holder.adapterPosition]
         Glide.with(context).load(path).into(holder.drawImage)
         holder.drawImage.setOnClickListener {
-            val intent = Intent(context, ImageActivity::class.java)
+            val intent = Intent(context, DisplayImageActivity::class.java)
             intent.putExtra(IMAGE_PATH,path)
             context.startActivity(intent)
         }

@@ -21,8 +21,8 @@ class CircleView(context: Context, attrs: AttributeSet): View(context, attrs) {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        val width = canvas.width.toFloat()
-        val height = canvas.height.toFloat()
+        val width = width.toFloat()
+        val height = height.toFloat()
         val cX = width.div(2)
         val cY = height.div(2)
 

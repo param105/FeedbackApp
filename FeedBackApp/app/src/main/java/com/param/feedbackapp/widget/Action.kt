@@ -6,6 +6,5 @@ import java.io.Writer
 
 interface Action : Serializable {
     fun perform(path: Path)
-
     fun perform(writer: Writer)
 }
