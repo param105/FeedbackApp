@@ -16,10 +16,12 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -33,8 +35,10 @@ import java.lang.Exception
 
 private const val REQUEST_CODE_DRAW = 111
 private const val PERMISSIONS_REQUEST_CAMERA_ACCESS = 222
+private const val PERMISSIONS_REQUEST_STORAGE_ACCESS = 333
 
 class RenderActivity : AppCompatActivity() {
+     private val TAG:String = "RenderActivity";
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,19 +60,51 @@ class RenderActivity : AppCompatActivity() {
         setPaintWidth()
     }
 
-    private fun setupImageChooser() {
-        ivProfile.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED
-            ) {
+    private fun openCamera(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale((this), Manifest.permission.CAMERA)) {
+
+            } else {
+
                 requestPermissions(
                     this,
                     arrayOf(Manifest.permission.CAMERA),
                     PERMISSIONS_REQUEST_CAMERA_ACCESS
                 )
-            } else {
-                selectImage(this)
             }
+        } else {
+            val takePicture =
+                Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(takePicture, 0)
+        }
+    }
+
+    private fun openGallery(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale((this), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            } else {
+
+                requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    PERMISSIONS_REQUEST_STORAGE_ACCESS
+                )
+            }
+        } else {
+            val pickPhoto = Intent(
+                Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            )
+            startActivityForResult(pickPhoto, 1)
+        }
+    }
+
+    private fun setupImageChooser() {
+        ivProfile.setOnClickListener {
+         selectImage(this)
 
         }
     }
@@ -80,15 +116,9 @@ class RenderActivity : AppCompatActivity() {
         builder.setTitle("Choose your profile picture")
         builder.setItems(options, DialogInterface.OnClickListener { dialog, item ->
             if (options[item] == "Take Photo") {
-                val takePicture =
-                    Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(takePicture, 0)
+              openCamera()
             } else if (options[item] == "Choose from Gallery") {
-                val pickPhoto = Intent(
-                    Intent.ACTION_PICK,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                )
-                startActivityForResult(pickPhoto, 1)
+               openGallery()
             } else if (options[item] == "Cancel") {
                 dialog.dismiss()
             }
@@ -116,14 +146,20 @@ class RenderActivity : AppCompatActivity() {
             val bStream = ByteArrayOutputStream()
             val bitmapDrawingView = draw_view.getBitmap()
             val bitmapProileView = ivProfile.drawable.toBitmap()
-            val finalBitmap = bitmapOverlayToCenter(bitmapDrawingView,bitmapProileView)
-            finalBitmap?.compress(Bitmap.CompressFormat.PNG, 100, bStream)
+            try {
+                val finalBitmap = bitmapOverlayToCenter(bitmapDrawingView,bitmapProileView)
+                finalBitmap?.compress(Bitmap.CompressFormat.PNG, 100, bStream)
+            }catch (e:OutOfMemoryError){
+                Log.d(TAG,"exception while compressing image")
+            }
+
             val byteArray = bStream.toByteArray()
             val returnIntent = Intent()
             returnIntent.putExtra("bitmap", byteArray)
             setResult(Activity.RESULT_OK, returnIntent)
             finish()
         }catch (e:Exception){
+            Log.d(TAG,"exception while compressing image")
             e.printStackTrace()
         }
 
@@ -343,7 +379,15 @@ class RenderActivity : AppCompatActivity() {
         when (requestCode) {
             PERMISSIONS_REQUEST_CAMERA_ACCESS -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    selectImage(this)
+                    openCamera()
+                } else {
+                    finish()
+                }
+                return
+            }
+            PERMISSIONS_REQUEST_STORAGE_ACCESS -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                   openGallery()
                 } else {
                     finish()
                 }

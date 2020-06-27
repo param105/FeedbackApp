@@ -27,19 +27,17 @@
         android:background="@color/color_white"
         android:padding="12dp"
         android:src="@drawable/ic_close_black_24dp"
-        android:tint="@color/icon_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab_send_drawing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/ic_done_black_24dp"
-        android:tint="@color/color_white"
-        app:backgroundTint="@color/color_black"
-        app:fabSize="mini"
+        android:layout_marginEnd="16dp"
+        android:text="@string/done"
+        android:textColor="@color/color_white"
+        app:icon="@drawable/ic_done_black_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/image_close_drawing" />
 
@@ -51,6 +49,7 @@
         android:background="@color/color_white"
         android:elevation="4dp"
         android:translationY="56dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline">
@@ -198,7 +197,8 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_close_drawing"
-        tools:srcCompat="@mipmap/ic_launcher_round" />
+        tools:srcCompat="@mipmap/ic_launcher_round"
+        android:contentDescription="@string/image_profile" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -206,5 +206,18 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/tvSignAndName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/name_and_sign"
+        android:textColor="@color/color_black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,4 +11,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string name="enter_file_name">Enter file name</string>
+    <string name="done">DONE</string>
+    <string name="name_and_sign">Name and Sign</string>
+    <string name="image_profile">image profile</string>
 </resources>
