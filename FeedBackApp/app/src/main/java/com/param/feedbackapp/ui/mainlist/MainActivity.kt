@@ -1,4 +1,4 @@
-package com.param.feedbackapp.ui
+package com.param.feedbackapp.ui.mainlist
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

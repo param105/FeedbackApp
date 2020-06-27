@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#B3A8A8"
-    tools:context=".draw.RenderActivity">
+    tools:context=".ui.drawing.RenderActivity">
 
     <com.param.feedbackapp.utils.DrawingView
         android:id="@+id/draw_view"

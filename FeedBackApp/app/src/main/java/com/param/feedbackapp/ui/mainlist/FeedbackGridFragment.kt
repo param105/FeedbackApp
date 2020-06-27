@@ -1,4 +1,4 @@
-package com.param.feedbackapp.ui
+package com.param.feedbackapp.ui.mainlist
 
 import android.Manifest
 import android.app.Activity
@@ -20,7 +20,7 @@ import android.widget.EditText
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.param.feedbackapp.R
-import com.param.feedbackapp.draw.RenderActivity
+import com.param.feedbackapp.ui.drawing.RenderActivity
 import kotlinx.android.synthetic.main.fragment_feedback_grid.*
 import java.io.File
 import java.io.FileOutputStream
@@ -145,7 +145,10 @@ class FirstFragment : Fragment() {
         when(requestCode){
             PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)){
-                    drawAdapter = DrawAdapter(requireContext(),getFilesPath())
+                    drawAdapter = DrawAdapter(
+                        requireContext(),
+                        getFilesPath()
+                    )
                     rv_feedback.adapter = drawAdapter
                 }else{
                     activity?.finish()

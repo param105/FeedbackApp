@@ -1,4 +1,4 @@
-package com.param.feedbackapp.draw
+package com.param.feedbackapp.ui.drawing
 
 import android.Manifest
 import android.app.Activity
@@ -12,7 +12,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Matrix
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore

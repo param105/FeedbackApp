@@ -1,4 +1,4 @@
-package com.param.feedbackapp.ui
+package com.param.feedbackapp.ui.mainlist
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.param.feedbackapp.R
+import com.param.feedbackapp.ui.details.DisplayImageActivity
 import kotlinx.android.synthetic.main.item_view.view.*
 
 const val IMAGE_PATH = "image_path"
