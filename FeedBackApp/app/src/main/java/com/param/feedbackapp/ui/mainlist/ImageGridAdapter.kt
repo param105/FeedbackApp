@@ -39,7 +39,12 @@ class DrawAdapter(private val context: Context, private val imageList: ArrayList
     }
 
     fun addItem(uri: Uri){
-        imageList.add(uri.toString())
-        notifyItemInserted(imageList.size-1)
+        try {
+            imageList.add(uri.toString())
+            notifyItemInserted(imageList.size-1)
+        }catch(e:Exception){
+            e.printStackTrace()
+        }
+
     }
 }

@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.param.feedbackapp.R
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_render.*
 import kotlinx.android.synthetic.main.color_palette_view.*
 import java.io.ByteArrayOutputStream
@@ -34,7 +35,7 @@ import java.lang.Exception
 
 private const val REQUEST_CODE_DRAW = 111
 private const val PERMISSIONS_REQUEST_CAMERA_ACCESS = 222
-private const val PERMISSIONS_REQUEST_STORAGE_ACCESS = 333
+const val PERMISSIONS_REQUEST_STORAGE_ACCESS = 333
 
 class RenderActivity : AppCompatActivity() {
      private val TAG:String = "RenderActivity";
@@ -52,11 +53,17 @@ class RenderActivity : AppCompatActivity() {
         fab_send_drawing.setOnClickListener {
             sendDataBackToList()
         }
-        setupImageChooser()
+        //setupImageChooser()
+        setupInputFields()
         setUpActionPallet()
         setColorChooser()
         setPaintAlpha()
         setPaintWidth()
+    }
+
+    private fun setupInputFields() {
+        etName.clearFocus()
+        etRank.clearFocus()
     }
 
     private fun openCamera(){
@@ -151,10 +158,11 @@ class RenderActivity : AppCompatActivity() {
             }catch (e:OutOfMemoryError){
                 Log.d(TAG,"exception while compressing image")
             }
-
+            System.gc()
             val byteArray = bStream.toByteArray()
             val returnIntent = Intent()
             returnIntent.putExtra("bitmap", byteArray)
+
             setResult(Activity.RESULT_OK, returnIntent)
             finish()
         }catch (e:Exception){

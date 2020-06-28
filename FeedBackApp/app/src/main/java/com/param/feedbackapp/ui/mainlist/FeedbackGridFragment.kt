@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.text.Html
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.EditText
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.param.feedbackapp.R
@@ -49,6 +51,12 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         checkPermissions()
         setFabClickEvent()
+        setDummyText()
+        //initRecycler()
+    }
+
+    private fun setDummyText() {
+        tvDummyText.setText(Html.fromHtml(getString(R.string.dummy_string)));
     }
 
     private fun setFabClickEvent() {
@@ -61,22 +69,35 @@ class FirstFragment : Fragment() {
     }
 
     private fun checkPermissions() {
-        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED){
-            requestPermissions(
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
-            )
-        }else{
-            drawAdapter = DrawAdapter(
-                this.requireContext(),
-                getFilesPath()
-            )
-            rv_feedback.layoutManager = GridLayoutManager(requireContext(),3)
-            rv_feedback.adapter = drawAdapter
 
+        if (ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    activity as Activity,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            ) {
+
+            } else {
+
+                ActivityCompat.requestPermissions(
+                    activity as Activity,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
+                )
+            }
         }
     }
+
+    private fun initRecycler() {
+        drawAdapter = DrawAdapter(
+            this.requireContext(),
+            getFilesPath()
+        )
+        rv_feedback.layoutManager = GridLayoutManager(requireContext(), 3)
+        rv_feedback.adapter = drawAdapter
+    }
+
 
     private fun getFilesPath(): ArrayList<String>{
         val resultList = ArrayList<String>()
@@ -96,16 +117,21 @@ class FirstFragment : Fragment() {
     }
 
     private fun saveImage(bitmap: Bitmap, fileName: String) {
-        val path =activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        Log.e("path",path.toString())
-        val file = File(path, "$fileName.png")
-        path?.mkdirs()
-        file.createNewFile()
-        val outputStream = FileOutputStream(file)
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream)
-        outputStream.flush()
-        outputStream.close()
-        updateRecyclerView(Uri.fromFile(file))
+        try{
+            val path =activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            Log.e("path",path.toString())
+            val file = File(path, "$fileName.png")
+            path?.mkdirs()
+            file.createNewFile()
+            val outputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream)
+            outputStream.flush()
+            outputStream.close()
+            updateRecyclerView(Uri.fromFile(file))
+        }catch(e:Exception){
+            e.printStackTrace()
+        }
+
     }
 
 
